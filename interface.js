@@ -12,7 +12,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 //接口：是对数据结构的描述，为了这些类型命名和为你的代码或第三方代码定义契约。
 //ps：类型检查不会检查顺序，只会检查属性是否存在且类型是对的。
 // interface LabelledValue {
