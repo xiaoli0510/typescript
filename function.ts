@@ -74,26 +74,44 @@
 // console.log(pickedCard.card, pickedCard.suit);
 
 //添加接口Card和Deck改写上面的函数
-interface Card {
-    suit: string;
-    card: number;
-}
-interface Deck {
-    suits: string[];
-    cards: number[];
-    createCardPicker(this: Deck): () => Card;
-}
-let deck: Deck = {
-    suits: ["hearts", "spades", "clubs", "diamonds"],
-    cards: Array(52),
-    createCardPicker: function (this: Deck) {
-        return () => {
-            let pickedCard = Math.floor(Math.random() * 52);
-            let pickedSuit = Math.floor(pickedCard / 13);
-            return { suit: this.suits[pickedSuit], card: pickedCard % 13 };//此时this是Deck类型
-        }
+// interface Card {
+//     suit: string;
+//     card: number;
+// }
+// interface Deck {
+//     suits: string[];
+//     cards: number[];
+//     createCardPicker(this: Deck): () => Card;
+// }
+// let deck: Deck = {
+//     suits: ["hearts", "spades", "clubs", "diamonds"],
+//     cards: Array(52),
+//     createCardPicker: function (this: Deck) {
+//         return () => {
+//             let pickedCard = Math.floor(Math.random() * 52);
+//             let pickedSuit = Math.floor(pickedCard / 13);
+//             return { suit: this.suits[pickedSuit], card: pickedCard % 13 };//此时this是Deck类型
+//         }
+//     }
+// }
+// let cardPicker = deck.createCardPicker();//ts知道在Deck某个对象上使用createCardPicker
+// let pickedCard = cardPicker();
+// console.log(pickedCard.card,pickedCard.suit);
+
+//this参数在回调函数里，在回调被调用时，函数会被当做一个普通函数调用，即this为undefined
+
+//函数重载：方法是为同一个函数提供多个函数类型定义来进行函数重载。编译器查找重载列表，尝试使用第一个重载定义，如果匹配的话就使用这个。因此，在定义重载时，一定要把最精确的定义放在前面。以下例子中有两个重载列表。
+let suits = ["hearts", "spades", "clubs", "diamonds"];
+function pickCard(x: { suit: string; card: number }[]): number;
+function pickCard(x: number): { suit: string; card: number; }
+function pickCard(x): any {
+    if (typeof x === 'object') {
+        let pickedCard = Math.floor(Math.random() * x.length);
+        return pickedCard;
+    } else if (typeof x === 'number') {
+        let pickedSuit = Math.floor(x / 13);
+        return { suit: suits[pickedSuit], card: x % 13 };
     }
 }
-let cardPicker = deck.createCardPicker();//ts知道在Deck某个对象上使用createCardPicker
-let pickedCard = cardPicker();
-console.log(pickedCard.card,pickedCard.suit);
+
+
